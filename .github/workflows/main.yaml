@@ -25,12 +25,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         
-
-      - name: install requirments
-        run: python3 -m venv venv
-
   
       - name: install dev req
         run: |
-          source venv/bin/activate && python -m pip install --upgrade pip setuptools wheel &&\
-          make install-dev.
+          apt-get update \
+          && apt-get install -y --no-install-recommends gcc build-essential \
+          && rm -rf /var/lib/apt/lists/* \
+          && python -m pip install --upgrade pip setuptools wheel \
+          && python -m pip install -e . --no-cache-dir \
+          && apt-get purge -y --auto-remove gcc build-essential
