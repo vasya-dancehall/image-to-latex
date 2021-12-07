@@ -1,5 +1,5 @@
 jobs:
-  CloneRepo:
+  CloneRep:
     resources:
       instance-type: C5
     uses: git-checkout@v1
