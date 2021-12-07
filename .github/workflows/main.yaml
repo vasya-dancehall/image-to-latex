@@ -28,9 +28,6 @@ jobs:
   
       - name: install dev req
         run: |
-          apt-get update \
-          && apt-get install -y --no-install-recommends gcc build-essential \
-          && rm -rf /var/lib/apt/lists/* \
-          && python -m pip install --upgrade pip setuptools wheel \
-          && python -m pip install -e . --no-cache-dir \
-          && apt-get purge -y --auto-remove gcc build-essential
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip setuptools wheel
