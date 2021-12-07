@@ -21,5 +21,5 @@ jobs:
       repo: CloneRepo.outputs.repo
     uses: script@v1
     with:
-      script: python /inputs/repo/scripts/prepare_data.py
+      script: python /inputs/repo/scripts/hello.py
       image: shevonkuan/image-to-latex:latest
