@@ -1,17 +1,30 @@
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
 jobs:
-  CloneRep:
+  
+  build:
+    
+    
+    
     resources:
       instance-type: C5
-    uses: git-checkout@v1
-    with:
-      url: https://github.com/vasya-dancehall/image-to-latex.git
-    uses: script@v1
-    with:
-      script: |-
-        python3 -m venv venv
-        source venv/bin/activate
-        python -m pip install --upgrade pip setuptools wheel
-        python -m pip install -e .
-      image: brunneis/python:3.8.3-ubuntu-20.04
+
+    runs-on: ubuntu-latest
     
-          
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        
+  
+      - name: install dev req
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -e .
