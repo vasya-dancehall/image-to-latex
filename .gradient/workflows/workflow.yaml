@@ -18,7 +18,7 @@ jobs:
     uses: script@v1
     with:
         script: |-
-          
+          cp -R inputs/repo /image-to-latex
           python -m pip install -e . --no-cache-dir
         image: paperspace/gradient-base:tf24-py36-0.10
           
