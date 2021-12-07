@@ -1,0 +1,8 @@
+image: shevonkuan/image-to-latex:latest
+port: 8080
+env:
+  - name: ENV
+    value: VAR
+resources:
+  replicas: 1
+  instanceType: C4
