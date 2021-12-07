@@ -5,7 +5,7 @@
 jobs:
   CloneRepo:
     resources:
-      instance-type: RTX4000
+      instance-type: C4
     outputs:
       repo:
         type: volume
