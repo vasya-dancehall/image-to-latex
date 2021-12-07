@@ -2,23 +2,16 @@ jobs:
   CloneRepo:
     resources:
       instance-type: C5
-    outputs:
-      repo:
-        type: volume
     uses: git-checkout@v1
     with:
       url: https://github.com/vasya-dancehall/image-to-latex.git
-  Prepare:
-    resources:
-      instance-type: C5
-    needs:
-      - CloneRepo
-    inputs:
-      repo: CloneRepo.outputs.repo
     uses: script@v1
     with:
-        script: |-
-          cp -R inputs/repo /image-to-latex
-          python -m pip install -e . --no-cache-dir
-        image: paperspace/gradient-base:tf24-py36-0.10
+      script: |-
+        python3 -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install -e .
+      image: brunneis/python:3.8.3-ubuntu-20.04
+    
           
