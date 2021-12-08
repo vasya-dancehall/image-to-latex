@@ -1,30 +1,63 @@
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-    
 jobs:
-  
-  build:
-    
-    
-    
+  CloneRepo:
     resources:
-      instance-type: C5
+      instance-type: C4
+    outputs:
+      repo:
+        type: volume
+    uses: git-checkout@v1
+    with:
+      url: https://github.com/vasya-dancehall/image-to-latex.git
+      path: /outputs/repo
 
-    runs-on: ubuntu-latest
-    
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        
-  
-      - name: install dev req
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install -e .
+  InstallPrereq:
+    resources:
+      instance-type: C4
+    needs:
+      - CloneRepo
+    inputs:
+      repo: CloneRepo.outputs.repo
+    outputs:
+      repo:
+        type: volume
+
+    uses: script@v1
+    with:
+      script: |-
+        cp -r inputs/repo outputs/repo        
+        cd outputs/repo
+        python3 -m venv venv
+        source venv/bin/activate
+        apt-get update
+        apt -y install build-essential
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install -e ".[dev]" --no-cache-dir
+        pip install pre-commit
+        pre-commit install
+        pre-commit autoupdate
+        pip uninstall dataclasses -y
+        pip install gdown
+        python3 get_data.py
+      image: brunneis/python:3.8.3-ubuntu-20.04
+
+  CollectData:
+    resources:
+      instance-type: C4
+    needs:
+      - CloneRepo
+      - InstallPrereq
+    inputs:
+      repo: InstallPrereq.outputs.repo
+    outputs:
+      im2latex:
+        type: dataset
+        with:
+          ref: dsr641lhmcupy1z
+
+    uses: script@v1
+    with:
+      script: |-
+        cp -r inputs/repo outputs/repo
+        cd outputs/repo
+        python3 get_data.py
+      image: brunneis/python:3.8.3-ubuntu-20.04
