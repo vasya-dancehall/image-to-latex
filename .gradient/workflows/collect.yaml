@@ -1,0 +1,33 @@
+jobs:
+  CloneRepo:
+    resources:
+      instance-type: C4
+    outputs:
+      repo:
+        type: volume
+    uses: git-checkout@v1
+    with:
+      url: https://github.com/vasya-dancehall/image-to-latex.git
+      path: /outputs/repo
+
+  CollectData:
+    resources:
+      instance-type: C4
+    needs:
+      - CloneRepo
+    inputs:
+      repo: CloneRepo.outputs.repo
+    outputs:
+      im2latex:
+        type: dataset
+        with:
+          ref: 'dsr641lhmcupy1z'
+
+    uses: script@v1
+    with:
+      script: |-
+        cd inputs/repo
+        ls
+        pip install googledrivedownloader
+        python3 scripts/get_data.py
+      image: alpine3.14

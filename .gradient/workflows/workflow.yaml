@@ -18,14 +18,17 @@ jobs:
     inputs:
       repo: CloneRepo.outputs.repo
     outputs:
-      repo:
-        type: volume
+      data:
+        type: dataset
+        with:
+          ref: 'dsr641lhmcupy1z'
+
 
     uses: script@v1
     with:
       script: |-
-        cp -r inputs/repo outputs/repo        
-        cd outputs/repo
+        cp -R inputs/repo /image2latex      
+        cd /image2latex
         python3 -m venv venv
         source venv/bin/activate
         apt-get update
@@ -36,28 +39,10 @@ jobs:
         pre-commit install
         pre-commit autoupdate
         pip uninstall dataclasses -y
-        pip install gdown
-        python3 get_data.py
+        pip install googledrivedownloader
+        ls
+        python3 scripts/get_data.py
       image: brunneis/python:3.8.3-ubuntu-20.04
 
-  CollectData:
-    resources:
-      instance-type: C4
-    needs:
-      - CloneRepo
-      - InstallPrereq
-    inputs:
-      repo: InstallPrereq.outputs.repo
-    outputs:
-      im2latex:
-        type: dataset
-        with:
-          ref: dsr641lhmcupy1z
 
-    uses: script@v1
-    with:
-      script: |-
-        cp -r inputs/repo outputs/repo
-        cd outputs/repo
-        python3 get_data.py
-      image: brunneis/python:3.8.3-ubuntu-20.04
+
