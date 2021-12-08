@@ -21,7 +21,7 @@ jobs:
       data:
         type: dataset
         with:
-          ref: 'dsr641lhmcupy1z'
+          ref: im2latex
 
 
     uses: script@v1
@@ -42,7 +42,7 @@ jobs:
         pip install googledrivedownloader
         ls
         python3 scripts/get_data.py
-      image: brunneis/python:3.8.3-ubuntu-20.04
+      image: shevonkuan/image-to-latex:latest
 
 
 
