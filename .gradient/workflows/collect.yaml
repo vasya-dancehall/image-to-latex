@@ -30,4 +30,4 @@ jobs:
         ls
         pip install googledrivedownloader
         python3 scripts/get_data.py
-      image: alpine3.14
+      image: python:latest
