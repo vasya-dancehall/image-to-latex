@@ -1,33 +1,42 @@
 jobs:
-  CloneRepo:
+  unpack:
     resources:
       instance-type: C4
     outputs:
-      repo:
-        type: volume
-    uses: git-checkout@v1
-    with:
-      url: https://github.com/vasya-dancehall/image-to-latex.git
-      path: /outputs/repo
-
-  CollectData:
-    resources:
-      instance-type: C4
-    needs:
-      - CloneRepo
-    inputs:
-      repo: CloneRepo.outputs.repo
-    outputs:
-      im2latex:
+      data:
         type: dataset
         with:
-          ref: 'dsr641lhmcupy1z'
+          ref: im2latex
 
     uses: script@v1
     with:
       script: |-
-        cd inputs/repo
+        wget https://dsc.cloud/999174/lst_files.tar -P /outputs/data
+        wget https://dsc.cloud/999174/formula_images_processed.tar -P /outputs/data
+        cd outputs/data
         ls
-        pip install googledrivedownloader
-        python3 scripts/get_data.py
-      image: python:latest
+        tar -xf lst_files.tar -C /outputs/data
+        tar -xf formula_images_processed.tar -C /outputs/data
+      image: bash
+
+  getPretrained:
+    resources:
+      instance-type: C4
+    outputs:
+      model:
+        type: dataset
+        with:
+          ref: im2latex
+    uses: script@v1
+    with:
+      script: |-
+        pip install wandb
+        python -c 'import wandb
+        wandb.login(key="138ca1cc6b82a08a807dd42fa96a2514d1fc16a5") 
+        api = wandb.Api()
+        run = api.run("enceladus/image-to-latex/1cekzc23")
+        run_files = [file for file in run.files() if file.name.endswith("ckpt")]
+        run_files[0].download("outputs/model/model.pt")'
+      image: python
+
+

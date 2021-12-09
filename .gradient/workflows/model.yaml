@@ -1,0 +1,16 @@
+jobs:
+  createModel:
+    resources:
+      instance-type: C4
+    inputs:
+      model:
+        type: dataset
+        with:
+          ref: im2latex:latest
+    outputs:
+      model-id:
+        type: string
+    uses: create-model@v1
+    with:
+      name: im2latex
+      type: Custom 

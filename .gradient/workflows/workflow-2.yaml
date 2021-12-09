@@ -1,0 +1,31 @@
+jobs:
+  AddData:
+    resources:
+      instance-type: C4
+    inputs:
+      repo: 
+        type: dataset
+        with:
+          ref: repo:cn9ewai
+      data: 
+        type: dataset
+        with:
+          ref: im2latex:8obuumx
+    outputs:
+      repo:
+        type: dataset
+        with:
+          ref: repo
+    uses: script@v1
+    with:
+      script: |-
+        apt install rsync
+        rsync -a -P /inputs/repo /folder
+        cd /folder
+        ls
+        mkdir /data
+        ls
+        ln -s /inputs/data/data /data 
+        rsync -a -P /folder /outputs/repo
+        
+      image: alpine

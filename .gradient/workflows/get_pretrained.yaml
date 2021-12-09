@@ -1,0 +1,37 @@
+jobs:
+  getPretrained:
+    resources:
+      instance-type: C4
+    outputs:
+      data:
+        type: dataset
+        with:
+          ref: dstp2whauo4kpu7
+               
+    uses: script@v1
+    with:
+      script: |-
+        pip install wandb
+        cp -R inputs/data outputs/data
+        python -c 'import wandb
+        wandb.login(key="138ca1cc6b82a08a807dd42fa96a2514d1fc16a5") 
+        api = wandb.Api()
+        run = api.run("enceladus/image-to-latex/1cekzc23")
+        run_files = [file for file in run.files() if file.name.endswith("ckpt")]
+        run_files[0].download("outputs/data/model/model.pt")'
+      image: python
+
+  createModel:
+    resources:
+      instance-type: C4
+    needs:
+      - getPretrained
+    inputs:
+      model: getPretrained.outputs.data
+    outputs:
+      model-id:
+        type: string
+    uses: create-model@v1
+    with:
+      name: im2latex
+      type: Custom 
