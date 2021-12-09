@@ -1,7 +1,3 @@
-on:
-  push:
-    branches: main 
-
 jobs:
   AddData:
     resources:
@@ -24,13 +20,12 @@ jobs:
     with:
       script: |-
         apt-get update
-        apt install rsync
-        rsync -a -P /inputs/repo /folder
-        cd /folder
+        apt-get -y install rsync tree 
+        tree -d -L 4 /inputs
+        rsync -r  /inputs/repo/ /outputs
+        cd /outputs
+        tree -d -L 4
+        mkdir /outputs/image2latex/data
         ls
-        mkdir /data
-        ls
-        ln -s /inputs/data/data /data 
-        rsync -a -P /folder /outputs/repo
-
-      image: alpine
+        ln -s /inputs/data/data /outputs/image2latex/data
+      image: ubuntu:latest

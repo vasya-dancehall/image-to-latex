@@ -17,6 +17,7 @@ def main(cfg: DictConfig):
     datamodule.setup()
 
     lit_model = LitResNetTransformer(**cfg.lit_model)
+    lit_model = lit_model.load_from_checkpoint("inputs/data/model/model.pt")
 
     callbacks: List[Callback] = []
     if cfg.callbacks.model_checkpoint:
