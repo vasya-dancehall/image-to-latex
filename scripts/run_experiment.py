@@ -13,6 +13,7 @@ from image_to_latex.lit_models import LitResNetTransformer
 
 @hydra.main(config_path="../conf", config_name="config")
 def main(cfg: DictConfig):
+    wandb.login(key="138ca1cc6b82a08a807dd42fa96a2514d1fc16a5")
     datamodule = Im2Latex(**cfg.data)
     datamodule.setup()
 
