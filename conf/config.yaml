@@ -27,7 +27,7 @@ callbacks:
 data:
   batch_size: 16
   num_workers: 8
-  pin_memory: false
+  pin_memory: true
 
 lit_model:
   # Optimizer
