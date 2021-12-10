@@ -1,6 +1,7 @@
 from argparse import Namespace
 from typing import List, Optional
 
+import wandb
 import hydra
 from omegaconf import DictConfig
 from pytorch_lightning import Trainer
