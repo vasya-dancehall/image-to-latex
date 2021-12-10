@@ -17,7 +17,7 @@ def main(cfg: DictConfig):
     datamodule.setup()
 
     lit_model = LitResNetTransformer(**cfg.lit_model)
-    lit_model = lit_model.load_from_checkpoint("artifacts/model.pt")
+    lit_model = lit_model.load_from_checkpoint("/image2latex/artifacts/model.pt")
 
     callbacks: List[Callback] = []
     if cfg.callbacks.model_checkpoint:
